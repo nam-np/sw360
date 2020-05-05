@@ -332,7 +332,9 @@ public class ProjectDatabaseHandler extends AttachmentAwareDatabaseHandler {
         // Save creating user
         project.createdBy = user.getEmail();
         project.createdOn = getCreatedOn();
-        project.businessUnit = getBUFromOrganisation(user.getDepartment());
+        // remove default value init that save to database when create new project
+        // save value input by user
+        //project.businessUnit = getBUFromOrganisation(user.getDepartment());
 
         // Add project to database and return ID
         repository.add(project);
