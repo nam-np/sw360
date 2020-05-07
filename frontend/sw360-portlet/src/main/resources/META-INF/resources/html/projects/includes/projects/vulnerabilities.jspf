@@ -193,8 +193,7 @@
                     { title: "<liferay-ui:message key="actions" />", data: 'action', default: '' }
                 ],
                 language: {
-                    url: "<liferay-ui:message key="datatables.lang" />",
-                    loadingRecords: "<liferay-ui:message key="loading" />"
+                    url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                 },
                 order: [[3, 'asc'], [4, 'desc']],
             }

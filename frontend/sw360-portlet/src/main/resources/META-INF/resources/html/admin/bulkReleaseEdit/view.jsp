@@ -144,9 +144,7 @@
                 return datatables.create('#ComponentBasicInfo', {
                     searching: true,
                     language: {
-                        url: "<liferay-ui:message key="datatables.lang" />" ,
-                        //emptyTable: "<liferay-ui:message key="no.releases.found" />",
-                        loadingRecords: "<liferay-ui:message key="loading" />"
+                        url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                     },
                     columnDefs: [
                         { targets: [0], orderable: false}

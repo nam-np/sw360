@@ -201,8 +201,7 @@
                         [1, 'asc']
                     ],
                     language: {
-                        url: "<liferay-ui:message key="datatables.lang" />",
-                        loadingRecords: "<liferay-ui:message key="loading" />"
+                        url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                     }
                 });
                 datatables.enableCheckboxForSelection($table, 0);

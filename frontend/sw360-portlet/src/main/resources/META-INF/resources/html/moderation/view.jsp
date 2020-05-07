@@ -215,9 +215,7 @@ AUI().use('liferay-portlet-url', function () {
                     {title: "<liferay-ui:message key="actions" />", className: 'one action'}
                 ],
                 language: {
-                    url: "<liferay-ui:message key="datatables.lang" />",
-                    //emptyTable: "<liferay-ui:message key="no.moderation.requests.found" />",
-                    loadingRecords: "<liferay-ui:message key="loading" />"
+                    url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                 },
                 initComplete: datatables.showPageContainer
             }, [0,1,2,3,4,5,6], [7]);

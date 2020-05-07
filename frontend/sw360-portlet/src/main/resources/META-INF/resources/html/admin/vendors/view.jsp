@@ -148,9 +148,7 @@
                     ],
                     searching: true,
                     language: {
-                        url: "<liferay-ui:message key="datatables.lang" />",
-                        //emptyTable: "<liferay-ui:message key="no.vendors.found" />",
-                        loadingRecords: "<liferay-ui:message key="loading" />"
+                        url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                     },
                 }, [0, 1, 2], [3]);
 

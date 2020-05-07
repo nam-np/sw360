@@ -183,9 +183,7 @@
                     }
                 ],
                 language: {
-                    url: "<liferay-ui:message key="datatables.lang" />",
-                    //emptyTable: "<liferay-ui:message key="no.results.found.please.refine.your.search" />",
-                    loadingRecords: "<liferay-ui:message key="loading" />"
+                    url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                 },
                 initComplete: function() {
                     $('#searchTable').parents('.container').find('.container-spinner').hide();

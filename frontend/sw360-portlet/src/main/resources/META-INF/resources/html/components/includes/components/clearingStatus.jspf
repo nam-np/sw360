@@ -85,8 +85,7 @@ require(['jquery', 'bridges/datatables', 'components/includes/releases/linkProje
                 {title: "<liferay-ui:message key="action" />", render: {display: renderActions}, className: "six actions" }
             ],
             language: {
-                 url: "<liferay-ui:message key="datatables.lang" />",
-                 loadingRecords: "<liferay-ui:message key="loading" />"
+                url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
             },
             columnDefs: [
                 {

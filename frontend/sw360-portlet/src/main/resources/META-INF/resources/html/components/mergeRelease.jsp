@@ -165,8 +165,7 @@
                         style: 'single',
                         rows: "<liferay-ui:message key="x.rows.selected" />"
                     },
-                    url: "<liferay-ui:message key="datatables.lang" />",
-                    loadingRecords: "<liferay-ui:message key="loading" />"
+                    url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                 },
                 order: [ [ 1, 'asc' ] ],
             }, undefined, [0], true);

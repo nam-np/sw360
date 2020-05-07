@@ -1,0 +1,15 @@
+{
+	"sEmptyTable":     "Không có dữ liệu trong bảng",
+	"sInfo":           "Hiện thị _START_ tới _END_ trong _TOTAL_ mục",
+	"sInfoEmpty":      "Hiện thị 0 tới 0 trong 0 mục",
+	"sInfoFiltered":   "(được lọc từ _MAX_ mục)",
+	"sLengthMenu":     "Hiện thị _MENU_ mục",
+	"sLoadingRecords": "Đang tải...",
+	"sProcessing":     "Đang xử lý...",
+	"sSearch":         "Tìm kiếm:",
+	"sZeroRecords":    "Không tìm thấy dòng nào phù hợp",
+	"oPaginate": {
+		"sNext":     "Sau",
+		"sPrevious": "Trước"
+	}
+}

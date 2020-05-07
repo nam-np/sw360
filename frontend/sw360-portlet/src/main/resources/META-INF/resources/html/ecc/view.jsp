@@ -108,8 +108,7 @@
             function configureEccInfoTable(){
                 return datatables.create('#eccInfoTable', {
                     language: {
-                        url: "<liferay-ui:message key="datatables.lang" />",
-                        loadingRecords: "<liferay-ui:message key="loading" />"
+                        url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                     },
                     searching: true
                 }, [0, 1, 2, 3, 4, 5, 6]);

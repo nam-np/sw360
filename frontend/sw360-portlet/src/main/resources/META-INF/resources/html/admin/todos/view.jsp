@@ -105,8 +105,7 @@
                     {"title": "<liferay-ui:message key="actions" />", data: 'id', render: renderActions }
                 ],
                 language: {
-                    url: "<liferay-ui:message key="datatables.lang" />",
-                    loadingRecords: "<liferay-ui:message key="loading" />"
+                    url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                 },
                 initComplete: datatables.showPageContainer
             }, [0, 1, 2], [3]);

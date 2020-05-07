@@ -432,8 +432,7 @@
                         loadClearingStateSummaries();
                     },
                     language: {
-                        url: "<liferay-ui:message key="datatables.lang" />",
-                        loadingRecords: "<liferay-ui:message key="loading" />"
+                        url: "<%=request.getContextPath()%>/js/content/<liferay-ui:message key="datatables.lang" />"
                     },
                     initComplete: datatables.showPageContainer
                 }, [0, 1, 2, 3, 4], 5);
