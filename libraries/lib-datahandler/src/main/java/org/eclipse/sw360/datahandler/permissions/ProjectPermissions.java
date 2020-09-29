@@ -93,7 +93,18 @@ public class ProjectPermissions extends DocumentPermissions<Project> {
                     return userIsEquivalentToModeratorInProject(input, user.getEmail());
                 }
                 case BUISNESSUNIT_AND_MODERATORS: {
-                    return isUserInBU(input, user.getDepartment()) || userIsEquivalentToModeratorInProject(input, user.getEmail()) || isUserAtLeast(CLEARING_ADMIN, user);
+                    if (user.getListDepartmentSize() > 1) {
+                        boolean check = false;
+                        for (String dept : user.getListDepartment()) {
+                              check = isUserInBU(input, dept) || userIsEquivalentToModeratorInProject(input, user.getEmail()) || isUserAtLeast(CLEARING_ADMIN, user);
+                                  if(check == true) {
+                                      break;
+                                  }
+                        }
+                        return check;
+                    }else {
+                        return isUserInBU(input, user.getDepartment()) || userIsEquivalentToModeratorInProject(input, user.getEmail()) || isUserAtLeast(CLEARING_ADMIN, user);
+                    }
                 }
                 case EVERYONE:
                     return true;

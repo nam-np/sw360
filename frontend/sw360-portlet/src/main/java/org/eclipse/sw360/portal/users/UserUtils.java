@@ -213,6 +213,8 @@ public class UserUtils {
         thriftUser.setGivenname(user.getFirstName());
         thriftUser.setLastname(user.getLastName());
         thriftUser.setDepartment(getDepartment(user));
+        // list department
+        thriftUser.setListDepartment(getDepartmentList(user));
     }
 
     public static void fillThriftUserFromThriftUser(final org.eclipse.sw360.datahandler.thrift.users.User thriftUser, final org.eclipse.sw360.datahandler.thrift.users.User user) {
@@ -226,6 +228,8 @@ public class UserUtils {
         thriftUser.setLastname(user.getLastname());
         thriftUser.setDepartment(user.getDepartment());
         thriftUser.setWantsMailNotification(user.isWantsMailNotification());
+        // list department
+        thriftUser.setListDepartment(user.getListDepartment());
     }
 
     public static UserGroup getUserGroupFromLiferayUser(User user) {
@@ -280,6 +284,25 @@ public class UserUtils {
             log.error("Error getting department", e);
         }
         return department;
+    }
+
+//    Add func test with list Organization
+
+    public static Set<String> getDepartmentList(User user) {
+        Set<String> list_department = new HashSet<>();
+        try {
+            List<Organization> organizations = user.getOrganizations();
+            if (!organizations.isEmpty()) {
+                for (int i = 0; i < organizations.size(); i++) {
+                    System.out.println(organizations.get(i).getName());
+                    list_department.add(organizations.get(i).getName());
+                }
+
+            }
+        } catch (PortalException | SystemException e) {
+            log.error("Error getting list department", e);
+        }
+        return list_department;
     }
 
     public static String getRoleConstantFromUserGroup(UserGroup group) {

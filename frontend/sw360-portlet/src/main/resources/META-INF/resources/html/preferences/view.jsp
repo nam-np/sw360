@@ -118,6 +118,10 @@
                             <td><liferay-ui:message key="role" />:</td>
                             <td><sw360:DisplayEnum value="${sw360User.userGroup}"/></td>
                         </tr>
+                        <tr>
+                            <td>List Department:</td>
+                            <td><sw360:DisplayCollection value="${sw360User.listDepartment}"/></td>
+                        </tr>
                     </table>
                 </div>
             </div>
