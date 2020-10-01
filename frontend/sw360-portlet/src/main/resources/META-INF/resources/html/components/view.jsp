@@ -344,10 +344,11 @@
             function renderLicenseLink(lics, type, row) {
                 var links = [],
                     licensePortletURL = '<%=friendlyLicenseURL%>'
-                    .replace(/components/g, "licenses");// DIRTY WORKAROUND
+                    .replace(/components/g, "licenses1");// DIRTY WORKAROUND
 
                 for (var i = 0; i < lics.length; i++) {
                     links[i] = render.linkTo(replaceFriendlyUrlParameter(licensePortletURL.toString(), lics[i], '<%=PortalConstants.PAGENAME_DETAIL%>'), lics[i]);
+                    links[i] = links[i].replace("+","%2B")
                 }
 
                 if(type == 'display') {

@@ -17,6 +17,10 @@
         <generated-parameter name="pagename">{page}</generated-parameter>
         <generated-parameter name="licenseid">{id}</generated-parameter>
         <implicit-parameter name="p_p_id">sw360_portlet_licenses</implicit-parameter>
+        <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
+        <implicit-parameter name="p_p_state">normal</implicit-parameter>
+        <implicit-parameter name="p_p_mode">view</implicit-parameter>
+        <implicit-parameter name="pagename">detail</implicit-parameter>
     </route>
     <route>
         <pattern>/add</pattern>
