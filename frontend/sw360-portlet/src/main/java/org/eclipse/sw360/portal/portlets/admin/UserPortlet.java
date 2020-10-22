@@ -210,7 +210,10 @@ public class UserPortlet extends Sw360Portlet {
             String department = "";
 
             if (organizations != null && organizations.size() > 0) {
-                department = organizations.get(0).getName();
+            	for(Organization org:organizations) {
+            		department = department + ", " +org;
+            	}
+                //department = organizations.get(0).getName();
             }
 
             String gid = liferayUser.getScreenName();
@@ -262,7 +265,7 @@ public class UserPortlet extends Sw360Portlet {
 
         /* Find the departments of the users, create the head departments and then create the organizations */
 
-        ImmutableSet<String> departments = FluentIterable.from(users).transform(input -> input.getDepartment()).toSet();
+        ImmutableSet<String> departments = FluentIterable.from(users).transform(input -> input.getDepartment().toString()).toSet();
 
         createOrganizations(request, departments);
     }

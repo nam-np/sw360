@@ -333,7 +333,8 @@ public class ProjectDatabaseHandler extends AttachmentAwareDatabaseHandler {
         // Save creating user
         project.createdBy = user.getEmail();
         project.createdOn = getCreatedOn();
-        project.businessUnit = getBUFromOrganisation(user.getDepartment());
+        log.info(project.businessUnit);
+        project.businessUnit = getBUFromOrganisation(user.getDepartment().stream().findFirst().get());
         setRequestedDateAndTrimComment(project, null, user);
 
         // Add project to database and return ID

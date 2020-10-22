@@ -28,8 +28,11 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -111,7 +114,11 @@ public class SSOAutoLogin extends LoggingComponent implements AutoLogin {
             String organizationName = orgHelper.mapOrganizationName(department);
             Organization organization = orgHelper.addOrGetOrganization(organizationName, companyId);
             log.info(String.format("Mapped orgcode %s to %s", department, organizationName));
-            User user = findOrCreateLiferayUser(request, email, extId, givenName, surname, companyId, organizationName);
+            
+         // Get the Set of String 
+            Set<String> setOfString = new HashSet<>(Arrays.asList(organizationName)); 
+
+            User user = findOrCreateLiferayUser(request, email, extId, givenName, surname, companyId, setOfString);
             user = updateLiferayUserEmailIfNecessary(email, user);
             orgHelper.reassignUserToOrganizationIfNecessary(user, organization);
             // Create a return credentials object
@@ -133,7 +140,7 @@ public class SSOAutoLogin extends LoggingComponent implements AutoLogin {
         return user;
     }
 
-    private User findOrCreateLiferayUser(HttpServletRequest request, String email, String extId, String givenName, String surname, long companyId, String organizationName) throws SystemException, PortalException {
+    private User findOrCreateLiferayUser(HttpServletRequest request, String email, String extId, String givenName, String surname, long companyId, Set<String> organizationName) throws SystemException, PortalException {
         User user;
         try {
             user = UserUtils.findLiferayUser(new HttpServletRequestAdapter(request), email, extId);
@@ -144,7 +151,7 @@ public class SSOAutoLogin extends LoggingComponent implements AutoLogin {
     }
 
     @NotNull
-    public User createLiferayUser(HttpServletRequest request, String emailId, String extid, String givenName, String surname, long companyId, String organizationName) throws SystemException, PortalException {
+    public User createLiferayUser(HttpServletRequest request, String emailId, String extid, String givenName, String surname, long companyId, Set<String> organizationName) throws SystemException, PortalException {
         User user;
         String password = UUID.randomUUID().toString();
 

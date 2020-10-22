@@ -49,9 +49,9 @@ public class ProjectDatabaseHandlerTest {
     private static final String attachmentDbName = DatabaseSettings.COUCH_DB_ATTACHMENTS;
     private static final String attachmentsDbName = DatabaseSettings.COUCH_DB_ATTACHMENTS;
 
-    private static final User user1 = new User().setEmail("user1").setDepartment("AB CD EF");
-    private static final User user2 = new User().setEmail("user2").setDepartment("AB CD FE");
-    private static final User user3 = new User().setEmail("user3").setDepartment("AB CD EF");
+    private static final User user1 = new User().setEmail("user1").setDepartment(new HashSet<>(Arrays.asList("AB CD EF")));
+    private static final User user2 = new User().setEmail("user2").setDepartment(new HashSet<>(Arrays.asList("AB CD FE")));
+    private static final User user3 = new User().setEmail("user3").setDepartment(new HashSet<>(Arrays.asList("AB CD EF")));
 
 
     ProjectModerator moderator = Mockito.mock(ProjectModerator.class);
@@ -156,9 +156,9 @@ public class ProjectDatabaseHandlerTest {
         assertEquals(1, handler.getMyProjectsSummary(user2.getEmail()).size());
         assertEquals(1, handler.getMyProjectsSummary(user3.getEmail()).size());
 
-        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment()).size());
-        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment()).size());
-        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment().toString()).size());
+        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment().toString()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment().toString()).size());
 
         assertEquals(5, handler.getAccessibleProjectsSummary(user1).size());
         assertEquals(1, handler.getAccessibleProjectsSummary(user2).size());
@@ -179,9 +179,9 @@ public class ProjectDatabaseHandlerTest {
         assertEquals(1, handler.getMyProjectsSummary(user2.getEmail()).size());
         assertEquals(1, handler.getMyProjectsSummary(user3.getEmail()).size());
 
-        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment()).size());
-        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment()).size());
-        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment().toString()).size());
+        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment().toString()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment().toString()).size());
 
         assertEquals(5, handler.getAccessibleProjectsSummary(user1).size());
         assertEquals(1, handler.getAccessibleProjectsSummary(user2).size());
@@ -203,9 +203,9 @@ public class ProjectDatabaseHandlerTest {
         assertEquals(1, handler.getMyProjectsSummary(user2.getEmail()).size());
         assertEquals(1, handler.getMyProjectsSummary(user3.getEmail()).size());
 
-        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment()).size());
-        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment()).size());
-        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment().toString()).size());
+        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment().toString()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment().toString()).size());
 
         assertEquals(5, handler.getAccessibleProjectsSummary(user1).size());
         assertEquals(1, handler.getAccessibleProjectsSummary(user2).size());
@@ -226,9 +226,9 @@ public class ProjectDatabaseHandlerTest {
         assertEquals(1, handler.getMyProjectsSummary(user2.getEmail()).size());
         assertEquals(1, handler.getMyProjectsSummary(user3.getEmail()).size());
 
-        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment()).size());
-        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment()).size());
-        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment().toString()).size());
+        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment().toString()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment().toString()).size());
 
         assertEquals(5, handler.getAccessibleProjectsSummary(user1).size());
         assertEquals(1, handler.getAccessibleProjectsSummary(user2).size());
@@ -249,9 +249,9 @@ public class ProjectDatabaseHandlerTest {
         assertEquals(1, handler.getMyProjectsSummary(user2.getEmail()).size());
         assertEquals(1, handler.getMyProjectsSummary(user3.getEmail()).size());
 
-        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment()).size());
-        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment()).size());
-        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user1.getDepartment().toString()).size());
+        assertEquals(1, handler.getBUProjectsSummary(user2.getDepartment().toString()).size());
+        assertEquals(4, handler.getBUProjectsSummary(user3.getDepartment().toString()).size());
 
         assertEquals(5, handler.getAccessibleProjectsSummary(user1).size());
         assertEquals(1, handler.getAccessibleProjectsSummary(user2).size());

@@ -110,20 +110,20 @@ service LicenseService {
      * Get a single license by providing its ID, filled with license type, risks and obligations containing obligations and whitelists
      * filtered for the given organisation
      **/
-    License getByID(1:string id, 2: string organisation);
+    License getByID(1:string id, 2: set<string> organisation);
 
     /**
       * Get a single license by providing its ID, filled with license type and obligations containing obligations and whitelists
       * filtered for the given organisation, risks are not set,
       * user's moderation request with status pending or in progress applied
       **/
-    License getByIDWithOwnModerationRequests(1:string id, 2: string organisation, 3: User user);
+    License getByIDWithOwnModerationRequests(1:string id, 2: set<string> organisation, 3: User user);
 
     /**
      * get licenses for ids filled with license types, risks and obligations containing obligations
      * whitelists filtered for organisation
      **/
-    list<License> getByIds(1:set<string> ids, 2: string organisation);
+    list<License> getByIds(1:set<string> ids, 2: set<string> organisation);
 
     /**
      * Add a new obligation object to database, return id
@@ -172,13 +172,13 @@ service LicenseService {
      * get a list of all full license documents filled with obligations, risks and license types,
      * obligations and risks themselves are not filled
      **/
-    list<License> getDetailedLicenseSummaryForExport(1: string organisation);
+    list<License> getDetailedLicenseSummaryForExport(1: set<string> organisation);
 
     /**
       * get a list of full documents with ids in identifiers, filled with obligations, risks and license types,
       * obligations and risks themselves are also filled, obligation whitelists are filtered for organisation
       **/
-    list<License> getDetailedLicenseSummary(1: string organisation, 2: list<string> identifiers);
+    list<License> getDetailedLicenseSummary(1: set<string> organisation, 2: list<string> identifiers);
 
     /**
      * bulk add for import of license archive, returns input license types if successful, null otherwise

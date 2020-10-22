@@ -57,7 +57,7 @@ struct ModerationRequest {
     16: required ModerationState moderationState,
     17: optional string reviewer,
     18: required bool requestDocumentDelete,
-    19: optional string requestingUserDepartment,
+    19: optional set<string> requestingUserDepartment,
     40: optional ComponentType componentType, // only relevant if the request is about components or releases
     34: optional string commentRequestingUser,
     35: optional string commentDecisionModerator,

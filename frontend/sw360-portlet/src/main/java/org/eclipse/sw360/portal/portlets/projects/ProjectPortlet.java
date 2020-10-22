@@ -1504,7 +1504,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
                 .stream()
                 .filter(filter)
                 .sorted(Comparator
-                        .comparing((Attachment a) -> nullToEmpty(a.getCreatedTeam()))
+                        .comparing((Attachment a) -> nullToEmpty(String.join(", ", a.getCreatedTeam())))
                         .thenComparing(Comparator.comparing((Attachment a) -> nullToEmpty(a.getCreatedOn())).reversed()))
                 .collect(Collectors.toList())));
     }
@@ -1618,14 +1618,24 @@ public class ProjectPortlet extends FossologyAwarePortlet {
         Set<Project> usingProjects;
         int allUsingProjectCount = 0;
         request.setAttribute(IS_USER_AT_LEAST_CLEARING_ADMIN, PermissionUtils.isUserAtLeast(UserGroup.CLEARING_ADMIN, user));
-
+        
+        // get list user departments
+        try {
+            Set<String> organizations = user.getDepartment();
+            request.setAttribute(PortalConstants.ORGANIZATIONS, organizations);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+        
         if (id != null) {
 
             try {
                 ProjectService.Iface client = thriftClients.makeProjectClient();
                 project = client.getProjectByIdForEdit(id, user);
+                System.out.println("Editing a Project");
                 usingProjects = client.searchLinkingProjects(id, user);
                 allUsingProjectCount = client.getCountByProjectId(id);
+                System.out.println("ED===================>>>>>" + project.getBusinessUnit() + project.getName());
             } catch (SW360Exception sw360Exp) {
                 setSessionErrorBasedOnErrorCode(request, sw360Exp.getErrorCode());
                 return;
@@ -1662,7 +1672,8 @@ public class ProjectPortlet extends FossologyAwarePortlet {
         } else {
             if(request.getAttribute(PROJECT) == null) {
                 project = new Project();
-                project.setBusinessUnit(user.getDepartment());
+                //project.setBusinessUnit(user.getDepartment().stream().findFirst().get());
+                System.out.println("==============Creating a Project================");	
                 request.setAttribute(PROJECT, project);
                 PortletUtils.setCustomFieldsEdit(request, user, project);
                 setAttachmentsInRequest(request, project);
@@ -1692,7 +1703,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
             if (id != null) {
                 ProjectService.Iface client = thriftClients.makeProjectClient();
                 String emailFromRequest = LifeRayUserSession.getEmailFromRequest(request);
-                String department = user.getDepartment();
+                String department = user.getDepartment().stream().findFirst().get();
 
                 Project newProject = PortletUtils.cloneProject(emailFromRequest, department, client.getProjectById(id, user));
                 setAttachmentsInRequest(request, newProject);
@@ -1705,7 +1716,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
                 request.setAttribute(SOURCE_PROJECT_ID, id);
             } else {
                 Project project = new Project();
-                project.setBusinessUnit(user.getDepartment());
+                project.setBusinessUnit(user.getDepartment().stream().findFirst().get());
                 setAttachmentsInRequest(request, project);
 
                 request.setAttribute(PROJECT, project);
@@ -1774,7 +1785,9 @@ public class ProjectPortlet extends FossologyAwarePortlet {
             } else {
                 // Add project
                 Project project = new Project();
+                System.out.println("Creating projet1");
                 ProjectPortletUtils.updateProjectFromRequest(request, project);
+                System.out.println("===================>>>>>" + project.businessUnit);
                 String cyclicLinkedProjectPath = client.getCyclicLinkedProjectPath(project, user);
                 if (!isNullEmptyOrWhitespace(cyclicLinkedProjectPath)) {
                     FossologyAwarePortlet.addCustomErrorMessage(CYCLIC_LINKED_PROJECT + cyclicLinkedProjectPath,
@@ -1788,6 +1801,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
                 String sourceProjectId = request.getParameter(SOURCE_PROJECT_ID);
                 AddDocumentRequestStatus status = summary.getRequestStatus();
 
+                System.out.println("BU===================>>>>>" + project.getBusinessUnit() + project.getName());
                 if (null != sourceProjectId && AddDocumentRequestStatus.SUCCESS.equals(status)) {
                     if (project.getReleaseIdToUsageSize() > 0) {
                         Project sourceProject = client.getProjectById(sourceProjectId, user);
@@ -1805,6 +1819,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
                         SessionMessages.add(request, "request_processed", successMsg);
                         response.setRenderParameter(PROJECT_ID, summary.getId());
                         response.setRenderParameter(PAGENAME, PAGENAME_EDIT);
+                        System.out.println("BU===================>>>>>" + project.getBusinessUnit() + project.getName());
                         break;
                     case DUPLICATE:
                         setSW360SessionError(request, ErrorMessages.PROJECT_DUPLICATE);
@@ -1823,6 +1838,7 @@ public class ProjectPortlet extends FossologyAwarePortlet {
                         setSW360SessionError(request, ErrorMessages.PROJECT_NOT_ADDED);
                         response.setRenderParameter(PAGENAME, PAGENAME_VIEW);
                 }
+                
 
             }
         } catch (TException e) {

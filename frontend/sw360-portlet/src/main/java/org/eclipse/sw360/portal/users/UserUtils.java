@@ -268,13 +268,15 @@ public class UserUtils {
         return UserGroup.USER;
     }
 
-    public static String getDepartment(User user) {
-        String department = "";
+    public static Set<String> getDepartment(User user) {
+        Set<String> department = new HashSet<>();;
         try {
             List<Organization> organizations = user.getOrganizations();
             if (!organizations.isEmpty()) {
-                Organization organization = organizations.get(0);
-                department = organization.getName();
+            	// get list organization from Liferay organization
+            	 for (int i = 0; i < organizations.size(); i++) {
+            		 department.add(organizations.get(i).getName());
+            	 }
             }
         } catch (PortalException | SystemException e) {
             log.error("Error getting department", e);

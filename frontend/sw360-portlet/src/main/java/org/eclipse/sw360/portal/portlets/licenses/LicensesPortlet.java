@@ -424,7 +424,11 @@ public class LicensesPortlet extends Sw360Portlet {
         Consumer<Obligation> fillObligation = obl -> wrapException(() -> {
             obl.setId(TMP_OBLIGATION_ID_PREFIX + UUID.randomUUID().toString());
             obl.setText(obligsText);
-            obl.addToWhitelist(user.getDepartment());
+            
+            for(String dept:user.getDepartment()) {
+            	obl.addToWhitelist(dept);
+            }
+            
             obl.setTitle(obligTitle);
             obl.setObligationLevel(ObligationLevel.LICENSE_OBLIGATION);
             if (bools != null) {

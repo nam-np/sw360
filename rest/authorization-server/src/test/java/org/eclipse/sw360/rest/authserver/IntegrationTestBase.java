@@ -45,6 +45,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -107,14 +109,14 @@ public abstract class IntegrationTestBase {
     }
 
     private void setupTestUser() {
-        adminTestUser = new User("mockedserviceadminuser@sw360.org", "qa-admin");
+        adminTestUser = new User("mockedserviceadminuser@sw360.org", new HashSet<>(Arrays.asList("qa-admin")));
         adminTestUser.externalid = "service-mocked-by-mockito-admin";
         adminTestUser.fullname = "Mocked Service Admin User";
         adminTestUser.givenname = "Mocked";
         adminTestUser.lastname = "Service Admin User";
         adminTestUser.userGroup = UserGroup.SW360_ADMIN;
 
-        normalTestUser = new User("mockedservicenormaluser@sw360.org", "qa-normal");
+        normalTestUser = new User("mockedservicenormaluser@sw360.org", new HashSet<>(Arrays.asList("qa-normal")));
         normalTestUser.externalid = "service-mocked-by-mockito-normal";
         normalTestUser.fullname = "Mocked Service Normal User";
         normalTestUser.givenname = "Mocked";

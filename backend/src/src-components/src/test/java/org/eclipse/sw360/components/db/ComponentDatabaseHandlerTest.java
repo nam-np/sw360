@@ -60,8 +60,8 @@ public class ComponentDatabaseHandlerTest {
 
     private static final String category = "Mobile";
 
-    private static final User user1 = new User().setEmail(email1).setDepartment("AB CD EF").setId("481489458");
-    private static final User user2 = new User().setEmail(email2).setDepartment("AB CD EF").setId("4786487647680");
+    private static final User user1 = new User().setEmail(email1).setDepartment(new HashSet<>(Arrays.asList("AB CD EF"))).setId("481489458");
+    private static final User user2 = new User().setEmail(email2).setDepartment(new HashSet<>(Arrays.asList("AB CD EF"))).setId("4786487647680");
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();

@@ -26,6 +26,8 @@ import static org.eclipse.sw360.datahandler.permissions.jgivens.GivenProject.Pro
 import static org.eclipse.sw360.datahandler.thrift.Visibility.*;
 import static org.eclipse.sw360.datahandler.thrift.users.UserGroup.*;
 
+import java.util.Set;
+
 /**
  * @author johannes.najjar@tngtech.com
  */
@@ -87,7 +89,7 @@ public class ProjectPermissionsVisibilityTest extends ScenarioTest<GivenProject,
 
     @Test
     @UseDataProvider("projectVisibilityProvider")
-    public void testVisibility(Visibility visibility, String businessUnit, String department, UserGroup userGroup, boolean expectedVisibility) {
+    public void testVisibility(Visibility visibility, String businessUnit, Set<String> department, UserGroup userGroup, boolean expectedVisibility) {
         given().a_new_project().with_visibility_$_and_business_unit_$(visibility, businessUnit);
         when().the_visibility_is_computed_for_department_$_and_user_group_$(department, userGroup);
         then().the_visibility_should_be(expectedVisibility);

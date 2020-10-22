@@ -28,7 +28,10 @@ import org.apache.logging.log4j.Logger;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -41,20 +44,25 @@ public class UserPortletUtils {
         // Utility class with only static functions
     }
 
-    public static User addLiferayUser(HttpServletRequest request, String firstName, String lastName, String emailAddress, String organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
+    public static User addLiferayUser(HttpServletRequest request, String firstName, String lastName, String emailAddress, Set<String> organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
         HttpServletRequestAdapter requestAdapter = new HttpServletRequestAdapter(request);
         return addLiferayUser(requestAdapter, firstName, lastName, emailAddress, organizationName, roleName, male, externalId, password, passwordEncrypted, activateImmediately);
     }
 
-    public static User addLiferayUser(PortletRequest request, String firstName, String lastName, String emailAddress, String organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
+    public static User addLiferayUser(PortletRequest request, String firstName, String lastName, String emailAddress, Set<String> organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
         PortletRequestAdapter requestAdapter = new PortletRequestAdapter(request);
         return addLiferayUser(requestAdapter, firstName, lastName, emailAddress, organizationName, roleName, male, externalId, password, passwordEncrypted, activateImmediately);
     }
 
-    private static User addLiferayUser(RequestAdapter requestAdapter, String firstName, String lastName, String emailAddress, String organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
+    private static User addLiferayUser(RequestAdapter requestAdapter, String firstName, String lastName, String emailAddress, Set<String> organizationName, String roleName, boolean male, String externalId, String password, boolean passwordEncrypted, boolean activateImmediately) throws SystemException, PortalException {
         long companyId = requestAdapter.getCompanyId();
-
-        long organizationId = OrganizationLocalServiceUtil.getOrganizationId(companyId, organizationName);
+        List<Long> organizationId = new ArrayList<Long>();;
+        for (String org:organizationName) {
+        	organizationId.add(OrganizationLocalServiceUtil.getOrganizationId(companyId, org));
+        }
+        
+        long[] organizationIds = organizationId.stream().mapToLong(l -> l).toArray();;
+        
         final Role role = RoleLocalServiceUtil.getRole(companyId, roleName);
         long roleId = role.getRoleId();
 
@@ -70,7 +78,7 @@ public class UserPortletUtils {
 
         try {
             long[] roleIds = roleId == 0 ? new long[]{} : new long[]{roleId};
-            long[] organizationIds = organizationId == 0 ? new long[]{} : new long[]{organizationId};
+            //long[] organizationIds = organizationId == 0 ? new long[]{} : new long[]{organizationId};
             long[] userGroupIds = null;
             Optional<ServiceContext> serviceContextOpt = requestAdapter.getServiceContext();
             final ServiceContext serviceContext;

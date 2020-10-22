@@ -498,13 +498,13 @@ public class SW360Utils {
         };
     }
 
-    public static List<String> getLicenseNamesFromIds(Collection<String> ids, String department) throws TException {
+    public static List<String> getLicenseNamesFromIds(Collection<String> ids, Set<String> department) throws TException {
         final List<License> licenseList = getLicenses(ids, department);
 
         return getLicenseNamesFromLicenses(licenseList);
     }
 
-    public static List<License> getLicenses(Collection<String> ids, String department) throws TException {
+    public static List<License> getLicenses(Collection<String> ids, Set<String> department) throws TException {
         if (ids != null && ids.size() > 0) {
             LicenseService.Iface client = new ThriftClients().makeLicenseClient();
             return client.getByIds(new HashSet<>(ids), department);

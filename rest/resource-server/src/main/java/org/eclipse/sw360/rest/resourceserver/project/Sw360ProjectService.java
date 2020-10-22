@@ -247,7 +247,7 @@ public class Sw360ProjectService implements AwareOfRestServices<Project> {
                 .stream()
                 .filter(filter)
                 .sorted(Comparator
-                        .comparing((Attachment a) -> nullToEmpty(a.getCreatedTeam()))
+                        .comparing((Attachment a) -> nullToEmpty(a.getCreatedTeam().toString()))
                         .thenComparing(Comparator.comparing((Attachment a) -> nullToEmpty(a.getCreatedOn())).reversed()))
                 .collect(Collectors.toList())));
     }

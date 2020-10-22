@@ -56,7 +56,7 @@ public class LicenseModerationRequestGenerator extends ModerationRequestGenerato
                 Obligation actualTodo = actualTodos.get(updateTodo.getId());
                 Set<String> actualWhitelist = actualTodo.whitelist != null ? actualTodo.whitelist : new HashSet<String>();
                 Set<String> updateWhitelist = updateTodo.whitelist != null ? updateTodo.whitelist : new HashSet<String>();
-                String departement = request.getRequestingUserDepartment();
+                Set<String> departement = request.getRequestingUserDepartment();
                 if(updateWhitelist.contains(departement) && !actualWhitelist.contains(departement)){
                     if(!documentAdditions.isSetObligations()) {
                         documentAdditions.setObligations(new ArrayList<>());

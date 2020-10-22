@@ -194,9 +194,15 @@
         <td>
             <div class="form-group">
                 <label class="mandatory" for="group"><liferay-ui:message key="group" /></label>
-                <input id="group" class="form-control" name="<portlet:namespace/><%=Project._Fields.BUSINESS_UNIT%>" type="text"
+                <%-- <input id="group" class="form-control" name="<portlet:namespace/><%=Project._Fields.BUSINESS_UNIT%>" type="text"
                     placeholder="<liferay-ui:message key="enter.group" />" required
-                    value="<sw360:out value="${project.businessUnit}"/>"/>
+                    value="<sw360:out value="${project.businessUnit}"/>"/> --%>
+                <select class="form-control" id="group" name="<portlet:namespace/><%=Project._Fields.BUSINESS_UNIT%>" >
+					<core_rt:forEach items="${organizations}" var="org">
+						<option value="${org}" class="textlabel stackedLabel" <core_rt:if test="${org == project.businessUnit}"> selected="selected"</core_rt:if>
+						>${org}</option>
+					</core_rt:forEach>
+				</select>
                 <div class="invalid-feedback">
                         <liferay-ui:message key="please.enter.a.group" />
                 </div>

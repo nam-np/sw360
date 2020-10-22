@@ -51,7 +51,7 @@ struct User {
     7: optional string fullname,
     8: optional string givenname, // firstname or given name of the person
     9: optional string lastname, // lastname or surname of the person
-    10: required string department,
+    10: required set<string> department,
     11: optional bool wantsMailNotification,
     12: optional string commentMadeDuringModerationRequest,
     13: optional map<string, bool> notificationPreferences,
@@ -118,6 +118,6 @@ service UserService {
     /**
      * returns department of the SW360-user with id equal to email
      **/
-    string getDepartmentByEmail(1:string email);
+    set<string> getDepartmentByEmail(1:string email);
 
 }

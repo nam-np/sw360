@@ -63,7 +63,12 @@
                                 <tr>
                                     <td><sw360:out value="${user.firstName}"/></td>
                                     <td><sw360:out value="${user.lastName}"/></td>
-                                    <td><sw360:out value="${user.getOrganizations(false).get(0).getName()}"/></td>
+                                    <!-- <td><sw360:out value="${user.getOrganizations(false).get(0).getName()}"/></td> -->
+                                    <td>
+                                        <core_rt:forEach var="department" items="${user.getOrganizations()}" varStatus="loop">
+                                            <sw360:out value="${department.getName()}"/>,
+                                        </core_rt:forEach>
+                                    </td>
                                     <td>
                                         <core_rt:forEach var="role" items="${user.roles}" varStatus="loop">
                                             <sw360:out value="${role.getName()}"/>,

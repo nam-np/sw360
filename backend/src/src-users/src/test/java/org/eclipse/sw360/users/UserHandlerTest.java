@@ -19,6 +19,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 
 public class UserHandlerTest {
     private static final String dbName = DatabaseSettings.COUCH_DB_USERS;
@@ -63,7 +66,7 @@ public class UserHandlerTest {
         handler.addUser(userWithoutComment); // does not contain a comment
 
         // update `userWithoutComment` with some stuff
-        userWithoutComment.setDepartment(DUMMY_DEPARTMENT);
+        userWithoutComment.setDepartment(new HashSet<>(Arrays.asList(DUMMY_DEPARTMENT)));
         userWithoutComment.setCommentMadeDuringModerationRequest(DUMMY_COMMENT);
         handler.updateUser(userWithoutComment); // now contains a comment
 

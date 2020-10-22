@@ -122,19 +122,19 @@ public class LicenseDatabaseHandler {
      * Get license from the database and fill its obligations
      */
 
-    public License getLicenseForOrganisation(String id, String organisation) throws SW360Exception {
+    public License getLicenseForOrganisation(String id, Set<String> set) throws SW360Exception {
         License license = licenseRepository.get(id);
 
         if (license == null) {
             throw new SW360Exception("No license details found in the database for id " + id + ".");
         }
 
-        fillLicenseForOrganisation(organisation, license);
+        fillLicenseForOrganisation(set, license);
 
         return license;
     }
 
-    public License getLicenseForOrganisationWithOwnModerationRequests(String id, String organisation, User user) throws SW360Exception {
+    public License getLicenseForOrganisationWithOwnModerationRequests(String id, Set<String> organisation, User user) throws SW360Exception {
         List<ModerationRequest> moderationRequestsForDocumentId = moderator.getModerationRequestsForDocumentId(id);
 
         License license = getLicenseForOrganisation(id, organisation);
@@ -157,7 +157,9 @@ public class LicenseDatabaseHandler {
 
                 for (Obligation oblig : license.getObligations()) {
                     //remove other organisations from whitelist of oblig
-                    oblig.setWhitelist(SW360Utils.filterBUSet(organisation, oblig.whitelist));
+                	for(String org:organisation) {
+                		oblig.setWhitelist(SW360Utils.filterBUSet(org, oblig.whitelist));
+                	}
                 }
 
                 documentState = CommonUtils.getModeratedDocumentState(moderationRequest);
@@ -170,7 +172,7 @@ public class LicenseDatabaseHandler {
         return license;
     }
 
-    private void fillLicenseForOrganisation(String organisation, License license) {
+    private void fillLicenseForOrganisation(Set<String> set, License license) {
         if (license.isSetObligationDatabaseIds()) {
             license.setObligations(getObligationsByIds(license.obligationDatabaseIds));
         }
@@ -236,8 +238,8 @@ public class LicenseDatabaseHandler {
         License license = licenseRepository.get(licenseId);
         assertNotNull(license);
 
-        String organisation = user.getDepartment();
-        String businessUnit = SW360Utils.getBUFromOrganisation(organisation);
+        Set<String> organisation = user.getDepartment();
+        String businessUnit = SW360Utils.getBUFromOrganisation(organisation.stream().findFirst().toString());
 
         if (makePermission(license, user).isActionAllowed(RequestedAction.WRITE)) {
 
@@ -283,7 +285,7 @@ public class LicenseDatabaseHandler {
         }
     }
 
-    public List<License> getLicenses(Set<String> ids, String organisation) {
+    public List<License> getLicenses(Set<String> ids, Set<String> organisation) {
         final List<License> licenses = licenseRepository.get(ids);
         final List<Obligation> obligationsFromLicenses = getTodosFromLicenses(licenses);
         final List<LicenseType> licenseTypes = getLicenseTypesFromLicenses(licenses);
@@ -291,7 +293,7 @@ public class LicenseDatabaseHandler {
         return licenses;
     }
 
-    public List<License> getDetailedLicenseSummaryForExport(String organisation) {
+    public List<License> getDetailedLicenseSummaryForExport(Set<String> organisation) {
 
         final List<License> licenses = licenseRepository.getAll();
         final List<Obligation> obligations = obligRepository.getAll();
@@ -300,7 +302,7 @@ public class LicenseDatabaseHandler {
     }
 
     @NotNull
-    private List<License> filterTodoWhiteListAndFillTodosRisksAndLicenseTypeInLicense(String organisation, List<License> licenses, List<Obligation> obligations, List<LicenseType> licenseTypes) {
+    private List<License> filterTodoWhiteListAndFillTodosRisksAndLicenseTypeInLicense(Set<String> organisation, List<License> licenses, List<Obligation> obligations, List<LicenseType> licenseTypes) {
         filterTodoWhiteList(organisation, obligations);
         fillTodosRisksAndLicenseTypes(licenses, obligations, licenseTypes);
         return licenses;
@@ -324,9 +326,11 @@ public class LicenseDatabaseHandler {
         }
     }
 
-    private void filterTodoWhiteList(String organisation, List<Obligation> obligations) {
+    private void filterTodoWhiteList(Set<String> organisation, List<Obligation> obligations) {
         for (Obligation oblig : obligations) {
-            oblig.setWhitelist(SW360Utils.filterBUSet(organisation, oblig.getWhitelist()));
+        	for (String org:organisation) {
+        		oblig.setWhitelist(SW360Utils.filterBUSet(org, oblig.getWhitelist()));
+        	}
         }
     }
 
@@ -345,7 +349,7 @@ public class LicenseDatabaseHandler {
         }
         if (makePermission(inputLicense, user).isActionAllowed(RequestedAction.WRITE)) {
 
-            String businessUnit = SW360Utils.getBUFromOrganisation(requestingUser.getDepartment());
+            String businessUnit = SW360Utils.getBUFromOrganisation(requestingUser.getDepartment().stream().findFirst().toString());
 
             Optional<License> oldLicense = Optional.ofNullable(inputLicense.getId())
                     .map(id -> licenseRepository.get(inputLicense.getId()));
@@ -435,7 +439,7 @@ public class LicenseDatabaseHandler {
         }
     }
 
-    public List<License> getDetailedLicenseSummaryForExport(String organisation, List<String> identifiers) {
+    public List<License> getDetailedLicenseSummaryForExport(Set<String> organisation, List<String> identifiers) {
         final List<License> licenses = CommonUtils.nullToEmptyList(licenseRepository.searchByShortName(identifiers));
         List<Obligation> obligations = getTodosFromLicenses(licenses);
         final List<LicenseType> licenseTypes = getLicenseTypesFromLicenses(licenses);

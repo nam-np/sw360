@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.eclipse.sw360.datahandler.thrift.users.RequestedAction.*;
 import static org.eclipse.sw360.datahandler.thrift.users.UserGroup.*;
@@ -78,7 +79,7 @@ public class ProjectPermissionsTest extends ScenarioTest<GivenProject, WhenCompu
 
     @Test
     @UseDataProvider("highestAllowedActionProvider")
-    public void testHighestAllowedAction(GivenProject.ProjectRole role, String user, String requestingUser, UserGroup requestingUserGroup, String requestingUserDept, List<RequestedAction> allowedActions) throws Exception {
+    public void testHighestAllowedAction(GivenProject.ProjectRole role, String user, String requestingUser, UserGroup requestingUserGroup, Set<String> requestingUserDept, List<RequestedAction> allowedActions) throws Exception {
         given().a_project_with_$_$(role,user).with_visibility_$_and_business_unit_$(Visibility.EVERYONE, theDept);
         when().the_highest_allowed_action_is_computed_for_user_$_with_user_group_$_and_department_$(requestingUser, requestingUserGroup, requestingUserDept);
         then().the_allowed_actions_should_be(allowedActions);
@@ -110,7 +111,7 @@ public class ProjectPermissionsTest extends ScenarioTest<GivenProject, WhenCompu
 
     @Test
     @UseDataProvider("highestAllowedActionForClosedProjectProvider")
-    public void testHighestAllowedActionForClosedProject(GivenProject.ProjectRole role, String user, String requestingUser, UserGroup requestingUserGroup, String requestingUserDept, List<RequestedAction> allowedActions) throws Exception {
+    public void testHighestAllowedActionForClosedProject(GivenProject.ProjectRole role, String user, String requestingUser, UserGroup requestingUserGroup, Set<String> requestingUserDept, List<RequestedAction> allowedActions) throws Exception {
         given().a_closed_project_with_$_$(role,user).with_visibility_$_and_business_unit_$(Visibility.EVERYONE, theDept);
         when().the_highest_allowed_action_is_computed_for_user_$_with_user_group_$_and_department_$(requestingUser, requestingUserGroup, requestingUserDept);
         then().the_allowed_actions_should_be(allowedActions);

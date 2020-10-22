@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -41,7 +43,7 @@ public class Sw360LicenseService {
         LicenseService.Iface sw360LicenseClient = getThriftLicenseClient();
         // TODO Kai Tödter 2017-01-26
         // What is the semantics of the second parameter (organization)?
-        return sw360LicenseClient.getByID(licenseId, "?");
+        return sw360LicenseClient.getByID(licenseId, new HashSet<>(Arrays.asList("?")));
     }
 
     public License createLicense(License license, User sw360User) throws TException {

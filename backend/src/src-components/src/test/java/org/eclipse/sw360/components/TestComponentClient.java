@@ -17,6 +17,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.THttpClient;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Created by bodet on 10/12/14.
@@ -25,7 +27,7 @@ import java.io.IOException;
  */
 public class TestComponentClient {
 
-    private static final User user = new User().setEmail("cedric.bodet@tngtech.com").setDepartment("AB CD EF");
+    private static final User user = new User().setEmail("cedric.bodet@tngtech.com").setDepartment( new HashSet<>(Arrays.asList("AB CD EF")));
 
     public static void main(String[] args) throws TException, IOException {
         THttpClient thriftClient = new THttpClient("http://127.0.0.1:8080/components/thrift");

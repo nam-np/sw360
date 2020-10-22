@@ -40,7 +40,7 @@ public class DisplayUserGroup extends SimpleTagSupport {
             user = UserCacheHolder.EMPTY_USER;
         }
 
-        getJspContext().getOut().print(escapeHtml(user.getDepartment()));
+        getJspContext().getOut().print(escapeHtml(user.getDepartment().toString()));
     }
 
 }

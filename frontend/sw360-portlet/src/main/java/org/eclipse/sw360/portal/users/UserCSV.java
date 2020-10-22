@@ -20,6 +20,10 @@ import javax.portlet.PortletRequest;
 import static org.eclipse.sw360.portal.users.UserUtils.getRoleConstantFromUserGroup;
 import static org.eclipse.sw360.portal.users.UserUtils.userGroupFromString;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by heydenrb on 01.03.16.
  *
@@ -30,7 +34,7 @@ public class UserCSV {
     private String givenname;
     private String lastname;
     private String email;
-    private String department;
+    private Set<String> department;
     private String group;
     private String gid;
     private boolean isMale;
@@ -49,7 +53,7 @@ public class UserCSV {
         return email;
     }
 
-    public String getDepartment() {
+    public Set<String> getDepartment() {
         return department;
     }
 
@@ -69,7 +73,7 @@ public class UserCSV {
         givenname = record.get(0);
         lastname = record.get(1);
         email = record.get(2);
-        department = record.get(3);
+        department = new HashSet<String>(Arrays.asList(record.get(3).split(", ")));
         group = record.get(4);
         gid = record.get(5);
         isMale = Boolean.parseBoolean(record.get(6));

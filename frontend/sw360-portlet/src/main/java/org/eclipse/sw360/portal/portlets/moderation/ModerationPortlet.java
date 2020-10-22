@@ -458,7 +458,7 @@ public class ModerationPortlet extends FossologyAwarePortlet {
 
         try {
             Set<ClearingRequest> clearingRequestsSet = client.getMyClearingRequests(user);
-            clearingRequestsSet.addAll(client.getClearingRequestsByBU(user.getDepartment()));
+            clearingRequestsSet.addAll(client.getClearingRequestsByBU(user.getDepartment().stream().findFirst().toString()));
 
             Map<Boolean, List<ClearingRequest>> partitionedClearingRequests = clearingRequestsSet
                     .stream().collect(Collectors.groupingBy(ModerationPortletUtils::isClosedClearingRequest));

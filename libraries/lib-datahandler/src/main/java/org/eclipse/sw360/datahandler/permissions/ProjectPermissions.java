@@ -93,7 +93,7 @@ public class ProjectPermissions extends DocumentPermissions<Project> {
                     return userIsEquivalentToModeratorInProject(input, user.getEmail());
                 }
                 case BUISNESSUNIT_AND_MODERATORS: {
-                    return isUserInBU(input, user.getDepartment()) || userIsEquivalentToModeratorInProject(input, user.getEmail()) || isUserAtLeast(CLEARING_ADMIN, user);
+                    return isUserInBU(input, user.getDepartment().stream().findFirst().toString()) || userIsEquivalentToModeratorInProject(input, user.getEmail()) || isUserAtLeast(CLEARING_ADMIN, user);
                 }
                 case EVERYONE:
                     return true;
@@ -132,7 +132,7 @@ public class ProjectPermissions extends DocumentPermissions<Project> {
 
     @Override
     protected boolean isUserInEquivalentToOwnerGroup(){
-        return isUserInBU(document, user.getDepartment());
+        return isUserInBU(document, user.getDepartment().stream().findFirst().toString());
     }
 
     @Override

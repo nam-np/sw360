@@ -392,7 +392,7 @@ public class ModerationDatabaseHandler {
         // Define moderators
         Set<String> moderators = new HashSet<>();
         try{
-            String department =  getDepartmentByUserEmail(release.getCreatedBy());
+            Set<String> department =  getDepartmentByUserEmail(release.getCreatedBy());
             CommonUtils.addAll(moderators, getUsersAtLeast(UserGroup.ECC_ADMIN, department));
         } catch (TException e){
             log.error("Could not get users from database. ECC admins not added as moderators, since department is missing.");
@@ -498,12 +498,12 @@ public class ModerationDatabaseHandler {
         addOrUpdate(request, user);
     }
 
-    private String getDepartmentByUserEmail(String userEmail) throws TException {
+    private Set<String> getDepartmentByUserEmail(String userEmail) throws TException {
         UserService.Iface client = (new ThriftClients()).makeUserClient();
         return client.getDepartmentByEmail(userEmail);
     }
 
-    private Set<String> getLicenseModerators(String department) {
+    private Set<String> getLicenseModerators(Set<String> department) {
         List<User> sw360users = getAllSW360Users();
         //try first clearing admins or admins from same department
         Set<String> moderators = sw360users
@@ -523,11 +523,11 @@ public class ModerationDatabaseHandler {
         return moderators;
     }
 
-    private Set<String> getUsersAtLeast(UserGroup userGroup, String department) {
+    private Set<String> getUsersAtLeast(UserGroup userGroup, Set<String> department) {
         return getUsersAtLeast(userGroup, department, true);
     }
 
-    private Set<String> getUsersAtLeast(UserGroup userGroup, String department, boolean defaultToAllUsersInGroup) {
+    private Set<String> getUsersAtLeast(UserGroup userGroup, Set<String> department, boolean defaultToAllUsersInGroup) {
         List<User> sw360users = getAllSW360Users();
         List<User> allRelevantUsers = sw360users
                     .stream()

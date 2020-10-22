@@ -996,7 +996,7 @@ public class ComponentDatabaseHandler extends AttachmentAwareDatabaseHandler {
         ensureEccInformationIsSet(release);
         release.getEccInformation().setAssessmentDate(SW360Utils.getCreatedOn());
         release.getEccInformation().setAssessorContactPerson(user.getEmail());
-        release.getEccInformation().setAssessorDepartment(user.getDepartment());
+        release.getEccInformation().setAssessorDepartment(user.getDepartment().toString());
     }
 
     private void autosetEccFieldsForReleaseWithDownloadUrl(Release release) {

@@ -19,6 +19,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.THttpClient;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,7 +34,7 @@ public class TestModerationClient {
         TProtocol protocol = new TCompactProtocol(thriftClient);
         ModerationService.Iface client = new ModerationService.Client(protocol);
 
-        List<ModerationRequest> requestsByModerator = client.getRequestsByModerator(new User().setId("58245y9845").setEmail("cedric.bodet@tngtech.com").setDepartment("BB"));
+        List<ModerationRequest> requestsByModerator = client.getRequestsByModerator(new User().setId("58245y9845").setEmail("cedric.bodet@tngtech.com").setDepartment(new HashSet<>(Arrays.asList("BB"))));
 
 
         System.out.println("Fetched " + requestsByModerator.size() + " moderation requests from moderation service");

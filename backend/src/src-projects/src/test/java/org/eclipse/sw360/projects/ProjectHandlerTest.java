@@ -30,8 +30,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +47,10 @@ public class ProjectHandlerTest {
     private static final String dbName = DatabaseSettings.COUCH_DB_DATABASE;
     private static final String attachmentDbName = DatabaseSettings.COUCH_DB_ATTACHMENTS;
 
-    private static final User user1 = new User().setEmail("user1").setDepartment("AB CD EF");
-    private static final User user2 = new User().setEmail("user2").setDepartment("AB CD FE");
-    private static final User user3 = new User().setEmail("user3").setDepartment("AB CD EF");
+    private static final User user1 = new User().setEmail("user1").setDepartment(new HashSet<>(Arrays.asList("AB CD EF")));
+    private static final User user2 = new User().setEmail("user2").setDepartment(new HashSet<>(Arrays.asList("AB CD FE")));
+    private static final User user3 = new User().setEmail("user1").setDepartment(new HashSet<>(Arrays.asList("AB CD EF")));
+
     private static final Map<String, Boolean> userRoles = new HashMap<>();
 
     ProjectHandler handler;

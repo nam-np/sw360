@@ -63,12 +63,12 @@ public class LicenseHandler implements LicenseService.Iface {
     }
 
     @Override
-    public List<License> getDetailedLicenseSummaryForExport(String organisation) throws TException {
+    public List<License> getDetailedLicenseSummaryForExport(Set<String> organisation) throws TException {
         return handler.getDetailedLicenseSummaryForExport(organisation);
     }
 
     @Override
-    public List<License> getDetailedLicenseSummary(String organisation, List<String> identifiers) throws TException {
+    public List<License> getDetailedLicenseSummary(Set<String> organisation, List<String> identifiers) throws TException {
         return handler.getDetailedLicenseSummaryForExport(organisation, identifiers);
     }
 
@@ -130,7 +130,7 @@ public class LicenseHandler implements LicenseService.Iface {
      * Get a single license by providing its ID, with obligations filtered for the given organisation
      */
     @Override
-    public License getByID(String id, String organisation) throws TException {
+    public License getByID(String id, Set<String> organisation) throws TException {
         assertNotEmpty(id);
         assertNotEmpty(organisation);
 
@@ -138,7 +138,7 @@ public class LicenseHandler implements LicenseService.Iface {
     }
 
     @Override
-    public License getByIDWithOwnModerationRequests(String id, String organisation, User user) throws TException {
+    public License getByIDWithOwnModerationRequests(String id, Set<String> organisation, User user) throws TException {
         assertNotEmpty(id);
         assertNotEmpty(organisation);
         assertUser(user);
@@ -147,7 +147,7 @@ public class LicenseHandler implements LicenseService.Iface {
     }
 
     @Override
-    public List<License> getByIds(Set<String> ids, String organisation) throws TException {
+    public List<License> getByIds(Set<String> ids, Set<String> organisation) throws TException {
         assertNotNull(ids);
         assertNotEmpty(organisation);
 

@@ -64,7 +64,7 @@ class Registrant extends User {
             SessionErrors.add(request, ErrorMessages.EMAIL_NOT_VALID);
             return false;
         }
-        if (isNullOrEmpty(getDepartment())) {
+        if (getDepartment().isEmpty()) {
             SessionErrors.add(request, ErrorMessages.DEPARTMENT_CANNOT_BE_EMPTY);
             return false;
         }

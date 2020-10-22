@@ -18,6 +18,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.THttpClient;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public class TestLicenseClient {
 
         System.out.println("Fetched " + licenses.size() + " licenses from license service");
 
-        final List<License> licenseList = client.getDetailedLicenseSummary("", ImmutableList.of("AFL-2.1","Artistic-1.0"));
+        final List<License> licenseList = client.getDetailedLicenseSummary( new HashSet<>(Arrays.asList("")), ImmutableList.of("AFL-2.1","Artistic-1.0"));
         System.out.println(licenseList.toString());
 
     }

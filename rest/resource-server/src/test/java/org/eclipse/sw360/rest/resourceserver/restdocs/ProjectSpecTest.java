@@ -290,11 +290,11 @@ public class ProjectSpecTest extends TestRestDocsSpecBase {
         given(this.releaseServiceMock.getReleaseForUserById(eq(release2.getId()), anyObject())).willReturn(release2);
 
         given(this.userServiceMock.getUserByEmailOrExternalId("admin@sw360.org")).willReturn(
-                new User("admin@sw360.org", "sw360").setId("123456789"));
+                new User("admin@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("123456789"));
         given(this.userServiceMock.getUserByEmail("admin@sw360.org")).willReturn(
-                new User("admin@sw360.org", "sw360").setId("123456789"));
+                new User("admin@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("123456789"));
         given(this.userServiceMock.getUserByEmail("jane@sw360.org")).willReturn(
-                new User("jane@sw360.org", "sw360").setId("209582812"));
+                new User("jane@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("209582812"));
         OutputFormatInfo outputFormatInfo = new OutputFormatInfo();
         outputFormatInfo.setFileExtension("html");
         given(this.licenseInfoMockService.getOutputFormatInfoForGeneratorClass(anyObject()))

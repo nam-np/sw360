@@ -193,11 +193,11 @@ public class ComponentSpecTest extends TestRestDocsSpecBase {
         );
 
         given(this.userServiceMock.getUserByEmailOrExternalId("admin@sw360.org")).willReturn(
-                new User("admin@sw360.org", "sw360").setId("123456789"));
+                new User("admin@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("123456789"));
         given(this.userServiceMock.getUserByEmail("admin@sw360.org")).willReturn(
-                new User("admin@sw360.org", "sw360").setId("123456789"));
+                new User("admin@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("123456789"));
         given(this.userServiceMock.getUserByEmail("john@sw360.org")).willReturn(
-                new User("john@sw360.org", "sw360").setId("74427996"));
+                new User("john@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("74427996"));
 
         List<Release> releaseList = new ArrayList<>();
         Release release = new Release();

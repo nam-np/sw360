@@ -74,11 +74,11 @@ public class AttachmentSpecTest extends TestRestDocsSpecBase {
         attachment.setFilename("spring-core-4.3.4.RELEASE.jar");
         attachment.setSha1("da373e491d3863477568896089ee9457bc316783");
         attachment.setAttachmentType(AttachmentType.BINARY_SELF);
-        attachment.setCreatedTeam("Clearing Team 1");
+        attachment.setCreatedTeam(new HashSet<>(Arrays.asList("Clearing Team 1")));
         attachment.setCreatedComment("please check before Christmas :)");
         attachment.setCreatedOn("2016-12-18");
         attachment.setCreatedBy("admin@sw360.org");
-        attachment.setCheckedTeam("Clearing Team 2");
+        attachment.setCheckedTeam(new HashSet<>(Arrays.asList("Clearing Team 2")));
         attachment.setCheckedComment("everything looks good");
         attachment.setCheckedOn("2016-12-18");
         attachment.setCheckStatus(CheckStatus.ACCEPTED);

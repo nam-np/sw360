@@ -317,7 +317,7 @@ public class DocxGenerator extends OutputGenerator<byte[]> {
             if(owner != null) {
                 XWPFTableRow row = table.insertNewTableRow(currentRow++);
                 row.addNewTableCell().setText(owner.getEmail());
-                row.addNewTableCell().setText(owner.getDepartment());
+                row.addNewTableCell().setText(owner.getDepartment().toString());
                 row.addNewTableCell().setText("Owner");
             }
         }
@@ -346,7 +346,7 @@ public class DocxGenerator extends OutputGenerator<byte[]> {
                     }
                     String department = "N.A.";
                     if(user != null) {
-                        department = user.getDepartment();
+                        department = user.getDepartment().toString();
                     }
 
                     row.addNewTableCell().setText(name);

@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -59,7 +60,7 @@ public class UserSpecTest extends TestRestDocsSpecBase {
         user.setFullname("John Doe");
         user.setGivenname("John");
         user.setLastname("Doe");
-        user.setDepartment("SW360 Administration");
+        user.setDepartment(new HashSet<>(Arrays.asList("SW360 Administration")));
         user.setWantsMailNotification(true);
         user.setFormerEmailAddresses(Sets.newHashSet("admin_bachelor@sw360.org"));
         userList.add(user);
@@ -74,7 +75,7 @@ public class UserSpecTest extends TestRestDocsSpecBase {
         user2.setFullname("Jane Doe");
         user2.setGivenname("Jane");
         user2.setLastname("Doe");
-        user2.setDepartment("SW360 BA");
+        user2.setDepartment(new HashSet<>(Arrays.asList("SW360 BA")));
         user2.setWantsMailNotification(false);
         userList.add(user2);
 

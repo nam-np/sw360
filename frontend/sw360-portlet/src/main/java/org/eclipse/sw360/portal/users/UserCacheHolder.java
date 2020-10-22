@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 public class UserCacheHolder {
     private static final Logger LOGGER = LogManager.getLogger(UserCacheHolder.class);
 
-    public static final User EMPTY_USER = new User().setId("").setEmail("").setExternalid("").setDepartment("").setLastname("").setGivenname("");
+    public static final User EMPTY_USER = new User().setId("").setEmail("").setExternalid("").setDepartment(null).setLastname("").setGivenname("");
 
     protected static UserCacheHolder instance = null;
 

@@ -27,6 +27,8 @@ import org.mockito.Mockito;
 
 import javax.portlet.PortletRequest;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -169,12 +171,12 @@ public class PortletUtilsTest {
         PortletRequest request = Mockito.mock(PortletRequest.class);
 
         // fill existing data
-        User user = createUser("tid", "test@example.org", "tpd");
+        User user = createUser("tid", "test@example.org", new HashSet<>(Arrays.asList("tpd")));
         new TestUserCacheHolder().enable(user);
         Set<Attachment> documentAttachments = createAttachments(user, "1", "2", "3");
 
         // fill request
-        new TestUserCacheHolder().enable(createUser("cid", "check@example.org", "cpd"));
+        new TestUserCacheHolder().enable(createUser("cid", "check@example.org", new HashSet<>(Arrays.asList("cpd"))));
         setAttachmentIds(request, "1", "2", "3");
         setAttachmentFilenames(request, "A", "B", "C");
         setAttachmentTypes(request, AttachmentType.DOCUMENT, AttachmentType.SOURCE, AttachmentType.DESIGN);
@@ -212,13 +214,13 @@ public class PortletUtilsTest {
         PortletRequest request = Mockito.mock(PortletRequest.class);
 
         // fill existing data
-        User user = createUser("tid", "test@example.org", "tpd");
+        User user = createUser("tid", "test@example.org", new HashSet<>(Arrays.asList("tpd")));
         Attachment attachment = createAttachments(user, "1").iterator().next();
         attachment.setCheckStatus(CheckStatus.ACCEPTED);
         attachment.setCheckedBy("check@example.org");
         attachment.setCheckedComment("check-comment");
         attachment.setCheckedOn("2017-01-31");
-        attachment.setCheckedTeam("check-team");
+        attachment.setCheckedTeam(new HashSet<>(Arrays.asList("check-team")));
 
         // fill request
         setAttachmentIds(request, "1");
@@ -249,7 +251,7 @@ public class PortletUtilsTest {
         Set<Attachment> documentAttachments = createAttachments("1", "2", "3");
 
         // fill request
-        new TestUserCacheHolder().enable(createUser("tid", "test@example.org", "tpd"));
+        new TestUserCacheHolder().enable(createUser("tid", "test@example.org", new HashSet<>(Arrays.asList("tpd"))));
         setAttachmentIds(request, "2");
         setAttachmentFilenames(request, "B");
         setAttachmentTypes(request, AttachmentType.SCREENSHOT);
@@ -349,7 +351,7 @@ public class PortletUtilsTest {
                 .thenReturn(comments);
     }
 
-    protected static User createUser(String id, String email, String department) {
+    protected static User createUser(String id, String email, Set<String> department) {
         return new User().setId(id).setEmail(email).setDepartment(department).setExternalid("").setLastname("").setGivenname("");
     }
 }

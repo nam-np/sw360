@@ -306,7 +306,7 @@ public class FossologyHandler implements FossologyService.Iface {
         etps.setStepName(stepName);
         etps.setStartedOn(Instant.now().toString());
         etps.setStartedBy(user.getEmail());
-        etps.setStartedByGroup(user.getDepartment());
+        etps.setStartedByGroup(user.getDepartment().toString());
         etps.setStepStatus(ExternalToolProcessStatus.NEW);
 
         return etps;

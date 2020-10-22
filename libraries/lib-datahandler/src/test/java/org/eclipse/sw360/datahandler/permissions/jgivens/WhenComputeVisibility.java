@@ -14,6 +14,11 @@ import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.Quoted;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.sw360.datahandler.TEnumToString;
 import org.eclipse.sw360.datahandler.permissions.ProjectPermissions;
 import org.eclipse.sw360.datahandler.thrift.projects.Project;
@@ -31,9 +36,9 @@ public class WhenComputeVisibility extends Stage<WhenComputeVisibility> {
     Boolean isVisible;
 
     private static String DUMMY_MAIL = "DAU@dau.com";
-    private static String DUMMY_DEP = "definitleyTheWrongDepartment YO HO HO";
+    private static Set<String> DUMMY_DEP = new HashSet<>(Arrays.asList("definitleyTheWrongDepartment YO HO HO"));
 
-    public WhenComputeVisibility the_visibility_is_computed_for_department_$_and_user_group_$(@Quoted String department, @TEnumToString UserGroup userGroup) {
+    public WhenComputeVisibility the_visibility_is_computed_for_department_$_and_user_group_$(@Quoted Set<String> department, @TEnumToString UserGroup userGroup) {
         final User user = new User(DUMMY_MAIL, department).setUserGroup(userGroup);
 
         isVisible = ProjectPermissions.isVisible(user).test(project);

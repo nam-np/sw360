@@ -56,11 +56,11 @@ struct Attachment {
     10: optional AttachmentType attachmentType,
 
     11: optional string createdBy, // should be e-mail
-    12: optional string createdTeam, // team name
+    12: optional set<string> createdTeam, // team name
     13: optional string createdComment,
     14: optional string createdOn,
     15: optional string checkedBy, // should be e-mail
-    16: optional string checkedTeam, // team name
+    16: optional set<string> checkedTeam, // team name
     17: optional string checkedComment, // team name
     18: optional string checkedOn, // strange to have string, but thrift?
 

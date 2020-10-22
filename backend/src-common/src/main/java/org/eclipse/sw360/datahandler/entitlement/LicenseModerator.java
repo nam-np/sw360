@@ -24,6 +24,7 @@ import org.apache.thrift.TException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.eclipse.sw360.datahandler.common.CommonUtils.isTemporaryObligation;
 import static org.eclipse.sw360.datahandler.common.CommonUtils.nullToEmptyList;
@@ -61,7 +62,7 @@ public class LicenseModerator extends Moderator<License._Fields, License> {
     public License updateLicenseFromModerationRequest(License license,
                                                       License licenseAdditions,
                                                       License licenseDeletions,
-                                                      String department) {
+                                                      Set<String> organisation) {
         Map<String, Obligation> actualTodoMap = Maps.uniqueIndex(nullToEmptyList(license.getObligations()), Obligation::getId);
 
         for (Obligation added : nullToEmptyList(licenseAdditions.getObligations())) {
@@ -76,11 +77,11 @@ public class LicenseModerator extends Moderator<License._Fields, License> {
                 license.getObligations().add(added);
             } else {
                 Obligation actual = actualTodoMap.get(added.getId());
-                if (added.isSetWhitelist() && added.getWhitelist().contains(department)) {
+                if (added.isSetWhitelist() && added.getWhitelist().contains(organisation)) {
                     if(!actual.isSetWhitelist()){
                         actual.setWhitelist(new HashSet<>());
                     }
-                    actual.getWhitelist().add(department);
+                    actual.getWhitelist().addAll(organisation);
                 }
             }
         }
@@ -94,9 +95,9 @@ public class LicenseModerator extends Moderator<License._Fields, License> {
                 log.info("Obligation from licenseDeletions does not exist (any more) in license.");
                 continue;
             }
-            if (deleted.isSetWhitelist() && deleted.getWhitelist().contains(department)) {
-                if (actual.isSetWhitelist() && actual.getWhitelist().contains(department)) {
-                    actual.getWhitelist().remove(department);
+            if (deleted.isSetWhitelist() && deleted.getWhitelist().contains(organisation)) {
+                if (actual.isSetWhitelist() && actual.getWhitelist().contains(organisation)) {
+                    actual.getWhitelist().remove(organisation);
                 }
             }
         }

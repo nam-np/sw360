@@ -20,6 +20,7 @@ import org.eclipse.sw360.users.db.UserDatabaseHandler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.eclipse.sw360.datahandler.common.SW360Assert.assertNotEmpty;
 import static org.eclipse.sw360.datahandler.common.SW360Assert.assertNotNull;
@@ -101,7 +102,7 @@ public class UserHandler implements UserService.Iface {
     }
 
     @Override
-    public String getDepartmentByEmail(String email) throws TException {
+    public Set<String> getDepartmentByEmail(String email) throws TException {
         User user = getByEmail(email);
         return user != null ? user.getDepartment() : null;
     }

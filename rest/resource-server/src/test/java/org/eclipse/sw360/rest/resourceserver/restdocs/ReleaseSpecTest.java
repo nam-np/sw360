@@ -110,11 +110,11 @@ public class ReleaseSpecTest extends TestRestDocsSpecBase {
 
         attachment.setSha1(attachmentSha1);
         attachment.setAttachmentType(AttachmentType.BINARY_SELF);
-        attachment.setCreatedTeam("Clearing Team 1");
+        attachment.setCreatedTeam(new HashSet<>(Arrays.asList("Clearing Team 1")));
         attachment.setCreatedComment("please check asap");
         attachment.setCreatedOn("2016-12-18");
         attachment.setCreatedBy("admin@sw360.org");
-        attachment.setCheckedTeam("Clearing Team 2");
+        attachment.setCheckedTeam(new HashSet<>(Arrays.asList("Clearing Team 2")));
         attachment.setCheckedComment("everything looks good");
         attachment.setCheckedOn("2016-12-18");
         attachment.setCheckStatus(CheckStatus.ACCEPTED);
@@ -250,9 +250,9 @@ public class ReleaseSpecTest extends TestRestDocsSpecBase {
                         .setCreatedOn(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
 
         given(this.userServiceMock.getUserByEmail("admin@sw360.org")).willReturn(
-                new User("admin@sw360.org", "sw360").setId("123456789"));
+                new User("admin@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("123456789"));
         given(this.userServiceMock.getUserByEmail("jane@sw360.org")).willReturn(
-                new User("jane@sw360.org", "sw360").setId("209582812"));
+                new User("jane@sw360.org", new HashSet<>(Arrays.asList("sw360"))).setId("209582812"));
         given(this.licenseServiceMock.getLicenseById("Apache-2.0")).willReturn(
                 new License("Apache 2.0 License")
                         .setText("Dummy License Text")

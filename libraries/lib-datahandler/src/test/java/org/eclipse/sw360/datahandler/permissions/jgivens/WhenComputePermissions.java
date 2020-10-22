@@ -22,6 +22,7 @@ import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.Quoted;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author johannes.najjar@tngtech.com
@@ -34,7 +35,7 @@ public class WhenComputePermissions  extends Stage<WhenComputePermissions> {
     @ProvidedScenarioState
     List<RequestedAction> allowedActions;
 
-    public WhenComputePermissions the_highest_allowed_action_is_computed_for_user_$_with_user_group_$_and_department_$(@Quoted String userEmail, @TEnumToString UserGroup userGroup, @Quoted String userDept) {
+    public WhenComputePermissions the_highest_allowed_action_is_computed_for_user_$_with_user_group_$_and_department_$(@Quoted String userEmail, @TEnumToString UserGroup userGroup, @Quoted Set<String> userDept) {
         final User user = new User(userEmail, userDept).setUserGroup(userGroup);
 
         final DocumentPermissions<Project> projectDocumentPermissions = PermissionUtils.makePermission(project, user);

@@ -63,7 +63,7 @@ public class LicenseHandlerTest {
         handler = new LicenseHandler();
 
         // Create the user
-        user = new User().setEmail("test@siemens.com").setDepartment("CT BE OP SWI OSS").setUserGroup(UserGroup.ADMIN);
+        user = new User().setEmail("test@siemens.com").setDepartment(new HashSet<>(Arrays.asList("CT BE OP SWI OSS"))).setUserGroup(UserGroup.ADMIN);
     }
 
     @After
