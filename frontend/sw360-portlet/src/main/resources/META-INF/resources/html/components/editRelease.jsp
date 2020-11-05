@@ -146,6 +146,8 @@
                                     <%@include file="/html/utils/includes/editAdditionalData.jsp" %>
 
                                     <%@include file="/html/components/includes/releases/editReleaseRepository.jspf" %>
+
+                                    <%@include file="/html/components/includes/releases/editSoftwareHeritage.jspf" %>
                                 </div>
                                 <div id="tab-linkedReleases" class="tab-pane <core_rt:if test="${selectedTab == 'tab-linkedReleases'}">active show</core_rt:if>" >
                                     <%@include file="/html/utils/includes/editLinkedReleases.jspf" %>
@@ -246,6 +248,9 @@
             function() {
                 <core_rt:choose>
                     <core_rt:when test="${addMode || release.permissions[WRITE]}">
+	                    if(!validateSWHID()) {
+                           return false;
+	                    }
                         $('#releaseEditForm').submit();
                     </core_rt:when>
                     <core_rt:otherwise>
@@ -261,6 +266,19 @@
             vendorsearch.openSearchDialog('<portlet:namespace/>what', '<portlet:namespace/>where',
                       '<portlet:namespace/>FULLNAME', '<portlet:namespace/>SHORTNAME', '<portlet:namespace/>URL', fillVendorInfo);
         });
+
+        function validateSWHID() {
+        	var SWHID = $('#SWHID').val();
+        	if (SWHID.length > 0){
+        		alert("Add SWHID to Release?");
+        		if (SWHID.length == 50){
+        			return true;
+        		}
+        		alert("Enter SWHID incorrect format!!!");
+				return false;
+        	}
+        	return true;
+        }
 
         function cancel() {
             $.ajax({

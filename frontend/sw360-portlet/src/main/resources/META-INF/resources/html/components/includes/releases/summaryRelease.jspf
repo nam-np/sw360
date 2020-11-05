@@ -102,4 +102,19 @@
         </table>
     </core_rt:if>
 
+    <core_rt:if test="${release.setSoftwareheritage}">
+        <table class="table label-value-table" id="ReleaseSoftwareheritage">
+            <thead>
+            <tr>
+                <th colspan="2">Software Heritage</th>
+            </tr>
+            </thead>
+
+            <tr>
+                <td>SWHID:</td>
+                <td><sw360:DisplayLink target="https://archive.softwareheritage.org/${release.softwareheritage.SWHID}"/> <sw360:out value="(${release.softwareheritage.SWHID})"/></td>
+            </tr>
+        </table>
+    </core_rt:if>
+
 </core_rt:if>

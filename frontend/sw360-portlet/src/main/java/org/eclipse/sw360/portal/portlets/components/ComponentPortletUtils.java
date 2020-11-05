@@ -9,6 +9,7 @@
  */
 package org.eclipse.sw360.portal.portlets.components;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.thrift.TException;
 import org.eclipse.sw360.datahandler.common.SW360Utils;
@@ -22,15 +23,29 @@ import org.eclipse.sw360.datahandler.thrift.vendors.VendorService;
 import org.eclipse.sw360.datahandler.thrift.vulnerabilities.ReleaseVulnerabilityRelation;
 import org.eclipse.sw360.portal.common.PortalConstants;
 import org.eclipse.sw360.portal.common.PortletUtils;
+import org.eclipse.sw360.portal.portlets.projects.ProjectPortlet;
 import org.eclipse.sw360.portal.users.UserCacheHolder;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.eclipse.sw360.datahandler.common.SW360Utils.newDefaultEccInformation;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jdk.internal.org.jline.utils.Log;
+
 
 /**
  * Component portlet implementation
@@ -44,6 +59,8 @@ public abstract class ComponentPortletUtils {
     private ComponentPortletUtils() {
         // Utility class with only static functions
     }
+
+    private static final Logger log = LogManager.getLogger(ProjectPortlet.class);
 
     public static void updateReleaseFromRequest(PortletRequest request, Release release) {
         for (Release._Fields field : Release._Fields.values()) {
@@ -84,6 +101,21 @@ public abstract class ComponentPortletUtils {
                 case ADDITIONAL_DATA:
                     release.setAdditionalData(PortletUtils.getAdditionalDataMapFromRequest(request));
                     break;
+                case SOFTWAREHERITAGE:
+                    String old_SWHID = "";
+                    try {
+                        old_SWHID = release.softwareheritage.getSWHID();
+                        release.setFieldValue(field, getSoftwareHeritageFromRequest(request, old_SWHID));
+                    } catch (Exception e) {
+                        try {
+                            release.setFieldValue(field, getSoftwareHeritageFromRequest(request, old_SWHID));
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    break;
                 default:
                     setFieldValue(request, release, field);
             }
@@ -115,6 +147,119 @@ public abstract class ComponentPortletUtils {
         }
 
         return cotsDetails;
+    }
+
+    private static SoftwareHeritage getSoftwareHeritageFromRequest(PortletRequest request, String old_SWHID) throws IOException, InterruptedException {
+        SoftwareHeritage softwareHeritage = new SoftwareHeritage();
+        setFieldValue(request, softwareHeritage, SoftwareHeritage._Fields.SWHID);
+
+        if (!softwareHeritage.isSetSWHID() || isNullOrEmpty(softwareHeritage.getSWHID())) {
+            softwareHeritage = null;
+            return softwareHeritage;
+        }
+
+        try {
+            if ( !old_SWHID.equals(softwareHeritage.SWHID)) {
+                downloadSourceFromSWHID(softwareHeritage.SWHID, softwareHeritage);
+            }else {
+                log.info("Source is downloaded !!!");
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            log.error("Source is not downloaded !!!");
+            return softwareHeritage;
+        }
+        return softwareHeritage;
+    }
+
+    private static void downloadSourceFromSWHID(String SWHID, SoftwareHeritage softwareHeritage) throws IOException, InterruptedException {
+        configProxy();
+        log.info("Downloading source from:  " +SWHID);
+
+        String command = "curl -L -X GET https://archive.softwareheritage.org/api/1/release/"+SWHID.replaceAll(".*rel:","");
+        log.info(command);
+        String target_url = curlCmd(command).get("target_url").asText();
+        log.info("target_url: " +target_url);
+        String source_name = curlCmd(command).get("name").asText();
+        log.info("source_name: " +source_name);
+
+        softwareHeritage.setName(source_name);
+
+        String command2 = "curl -L -X GET " +target_url;
+        log.info(command2);
+        String directory = curlCmd(command2).get("directory").asText();
+        log.info("directory_url: " +directory);
+
+        String command3 = "curl -L -X POST https://archive.softwareheritage.org/api/1/vault/directory/" +directory;
+        log.info(command3);
+        String fetch_url  = curlCmd(command3).get("fetch_url").asText();
+        log.info("fetch_url: " +fetch_url);
+
+        while (true) {
+            String status = curlCmd(command3).get("status").asText();
+            log.info("Check request status is: " + status);
+            if ( status.equals("done") ) {
+                log.info("Starting download !!!");
+                break;
+            }
+            log.info("Wait for few minutes for processing request !!!");
+            Thread.sleep(5000);
+        }
+
+        String command4 = "curl -X GET https://archive.softwareheritage.org" +fetch_url+ " --output " +source_name+ ".tar.gz";
+        System.out.println(command4);
+        curlCmd(command4);
+        log.info("Download source success !!!");
+    }
+
+    private static JsonNode curlCmd(String command) throws IOException {
+        StringBuffer output = new StringBuffer();
+        Process p = Runtime.getRuntime().exec(command);
+        JsonNode jsonNode = null;
+        try {
+            p.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            jsonNode = mapper.readTree(output.toString());
+            log.info("Response: \n"+jsonNode.toString());
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jsonNode;
+    }
+
+    private static void configProxy() {
+        // log.info("The following configuration will be used for connections to the
+        String PROXY_HOST = "10.116.16.3";
+        String PROXY_PORT = "3128";
+        String PROXY_USER = "hieupv";
+        String PROXY_PASSWORD = "Copper1997";
+
+        try {
+            if (PROXY_HOST != null) {
+                Authenticator.setDefault(new Authenticator() {
+                    @Override
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(PROXY_USER, PROXY_PASSWORD.toCharArray());
+                    }
+                });
+                System.setProperty("https.proxyHost", PROXY_HOST);
+                System.setProperty("https.proxyPort", PROXY_PORT);
+                System.setProperty("https.proxyUser", PROXY_USER);
+                System.setProperty("https.proxyPassword", PROXY_PASSWORD);
+                System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
+            }
+        } catch (Exception e) {
+            log.info("Cannot connect via http proxy");
+        }
     }
 
     private static Repository getRepositoryFromRequest(PortletRequest request) {
@@ -188,8 +333,8 @@ public abstract class ComponentPortletUtils {
         PortletUtils.setFieldValue(request, release, field, Release.metaDataMap.get(field), "");
     }
 
-    private static void setFieldValue(PortletRequest request, Repository repository, Repository._Fields field) {
-        PortletUtils.setFieldValue(request, repository, field, Repository.metaDataMap.get(field), Release._Fields.REPOSITORY.toString());
+    private static void setFieldValue(PortletRequest request, SoftwareHeritage softwareHeritage, SoftwareHeritage._Fields field) {
+        PortletUtils.setFieldValue(request, softwareHeritage, field, SoftwareHeritage.metaDataMap.get(field), Release._Fields.SOFTWAREHERITAGE.toString());
     }
 
     private static void setFieldValue(PortletRequest request, ClearingInformation clearingInformation, ClearingInformation._Fields field) {
@@ -210,6 +355,10 @@ public abstract class ComponentPortletUtils {
 
     private static void setFieldValue(PortletRequest request, Obligations oblig, Obligations._Fields field) {
         PortletUtils.setFieldValue(request, oblig, field, Obligations.metaDataMap.get(field), "");
+    }
+
+    private static void setFieldValue(PortletRequest request, Repository repository, Repository._Fields field) {
+        PortletUtils.setFieldValue(request, repository, field, Repository.metaDataMap.get(field), Release._Fields.REPOSITORY.toString());
     }
 
     public static RequestStatus deleteRelease(PortletRequest request, Logger log) {

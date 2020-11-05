@@ -62,6 +62,11 @@ struct Repository {
     2: optional RepositoryType repositorytype
 }
 
+struct SoftwareHeritage {
+    1: required string SWHID,
+    2: optional string name
+}
+
 /**
  * A list of all known external tools.
  **/
@@ -228,6 +233,8 @@ struct Release {
     10: optional set<Attachment> attachments,
     11: optional string createdOn, // Creation date YYYY-MM-dd
     12: optional Repository repository, // Repository where the release is maintained
+    // Software heritage IDs
+    1997: optional SoftwareHeritage softwareheritage,
     16: optional MainlineState mainlineState, // enum: specific, open, mainline, phaseout
     17: optional ClearingState clearingState, // TODO we probably need to map by clearing team?
 
